@@ -5,8 +5,9 @@ import {TaskType} from "./App";
 
 type TasksListPropsType = {
     tasks: Array<TaskType>
-    removeTasks: (id: string) => void
-    changeStatus:(id: string, isDone: boolean) => void
+    removeTasks: (tasksListID: string, id: string) => void
+    changeStatus:(tasksListID: string, id: string, isDone: boolean) => void
+    tasksListID: string
 
 }
 
@@ -19,9 +20,9 @@ const TasksList = (props: TasksListPropsType) => {
             <li key={elem.id} className={elem.isDone ? "isDone" : ''}>
                 <input type="checkbox"
                        checked={elem.isDone}
-                       onChange={(e) => props.changeStatus(elem.id,e.currentTarget.checked)}/>
+                       onChange={(e) => props.changeStatus(props.tasksListID, elem.id,e.currentTarget.checked)}/>
                 <span>{elem.title}</span>
-                <button onClick={() => props.removeTasks(elem.id)}>X</button>
+                <button onClick={() => props.removeTasks(props.tasksListID, elem.id)}>X</button>
             </li>
         )
     })
