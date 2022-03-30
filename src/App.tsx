@@ -46,44 +46,52 @@ function App() {
         ]
     })
 
+    const removeTodoList = (tasksListID: string) => {
+        setTodoLists(todoLists.filter(el => el.id !== tasksListID))
+        delete tasks[tasksListID]
+    }
+
     const removeTasks = (tasksListID: string, id: string) => {
         setTasks({...tasks, [tasksListID]:tasks[tasksListID].filter((el) => el.id !== id)})
     }
 
     const addTask = (tasksListID: string, title: string) => {
-
+        const newTask = {id: v1(), title: title, isDone: false}
+        setTasks({...tasks, [tasksListID]:[newTask, ...tasks[tasksListID]]})
     }
 
     const changeFilter = (tasksListID: string, filter: FilterValuesType) => {
-
+        setTodoLists(todoLists.map(el => el.id === tasksListID ? {...el, filterT:filter} : el))
     }
 
     const changeStatus = (tasksListID: string, id: string, isDone: boolean) => {
-
+        setTasks({...tasks, [tasksListID]:tasks[tasksListID].map(el => el.id === id ? {...el, isDone} : el)})
     }
-
-
-
-
-
-
-
-
 
     return (
         <div className="App">
 
+
+
             {todoLists.map((el) => {
+                let tasksForTodoList = tasks[el.id]
+                if (el.filterT === 'Active') {
+                    tasksForTodoList = tasksForTodoList.filter(t => !t.isDone)
+                }
+                if (el.filterT === 'Completed') {
+                    tasksForTodoList = tasksForTodoList.filter(t => t.isDone)
+                }
                 return (
                     <TodoList
                         tasksListID={el.id}
                         title={el.titleT}
                         filter={el.filterT}
-                        tasks={tasks[el.id]}
+                        tasks={tasksForTodoList}
                         removeTasks={removeTasks}
                         addTask={addTask}
                         changeFilter={changeFilter}
                         changeStatus={changeStatus}
+                        removeTodoList={removeTodoList}
                     />
                 )
             })}

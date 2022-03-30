@@ -3,32 +3,30 @@ import {FilterValuesType, TaskType} from "./App";
 import Button from "./Button";
 import TodoListHeader from "./TodoListHeader";
 import TasksList from "./TasksList";
-import tasksList from "./TasksList";
+
 
 export type TodoListPropsType = {
     tasksListID: string
     title: string
     filter: FilterValuesType
     tasks: Array<TaskType>
-
-
-
     removeTasks:  (tasksListID: string, id: string) => void
     addTask: (tasksListID: string, title: string) => void
     changeFilter: (tasksListID: string, filter: FilterValuesType) => void
     changeStatus:( tasksListID: string, id: string, isDone: boolean) => void
+    removeTodoList: (tasksListID: string) => void
 
 }
 
     const TodoList = (props: TodoListPropsType) => {
     const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<string|null>(null)
     const addTask = () => {
         const trimmedTitle = title.trim()
         if(trimmedTitle) {
             props.addTask(props.tasksListID, trimmedTitle)
         } else {
-            setError(error)
+            setError("Title is required")
         }
 
         setTitle('')
@@ -36,14 +34,17 @@ export type TodoListPropsType = {
     return (
 
         <div>
-            <TodoListHeader title={props.title}/>
+            <TodoListHeader title={props.title}
+                            removeTodoList={props.removeTodoList}
+                            tasksListID={props.tasksListID}
+            />
             <div>
                 <input
                     className={error ? 'error' : ''}
                     value={title}
                     onChange={(e) => {
                         setTitle(e.currentTarget.value)
-                        setError(false)
+                        setError("Title is required")
                     }}
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -53,7 +54,7 @@ export type TodoListPropsType = {
                     }
                 />
                 <button onClick={addTask}>+</button>
-                {error && <div className={'error-message'}>Title is required!</div>}
+                {error && <div className={'error-message'}>{error}</div>}
             </div>
             <TasksList tasks={props.tasks}
                        removeTasks={props.removeTasks}
