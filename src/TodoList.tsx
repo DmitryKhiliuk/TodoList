@@ -3,6 +3,7 @@ import {FilterValuesType, TaskType} from "./App";
 import Button from "./Button";
 import TodoListHeader from "./TodoListHeader";
 import TasksList from "./TasksList";
+import {AddItemForm} from "./AddItemForm";
 
 
 export type TodoListPropsType = {
@@ -15,11 +16,12 @@ export type TodoListPropsType = {
     changeFilter: (tasksListID: string, filter: FilterValuesType) => void
     changeStatus:( tasksListID: string, id: string, isDone: boolean) => void
     removeTodoList: (tasksListID: string) => void
+    updateTask: (tasksListID:string, taskId:string, newTitle:string) => void
 
 }
 
     const TodoList = (props: TodoListPropsType) => {
-    const [title, setTitle] = useState<string>('')
+    /*const [title, setTitle] = useState<string>('')
     const [error, setError] = useState<string|null>(null)
     const addTask = () => {
         const trimmedTitle = title.trim()
@@ -30,7 +32,10 @@ export type TodoListPropsType = {
         }
 
         setTitle('')
-    }
+    }*/
+        const addTaskHandler = (newTitle:string) => {
+          props.addTask(props.tasksListID, newTitle)
+        }
     return (
 
         <div>
@@ -38,13 +43,16 @@ export type TodoListPropsType = {
                             removeTodoList={props.removeTodoList}
                             tasksListID={props.tasksListID}
             />
-            <div>
+
+            <AddItemForm callBack={addTaskHandler}/>
+
+            {/*<div>
                 <input
                     className={error ? 'error' : ''}
                     value={title}
                     onChange={(e) => {
                         setTitle(e.currentTarget.value)
-                        setError("Title is required")
+
                     }}
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {
@@ -55,11 +63,12 @@ export type TodoListPropsType = {
                 />
                 <button onClick={addTask}>+</button>
                 {error && <div className={'error-message'}>{error}</div>}
-            </div>
+            </div>*/}
             <TasksList tasks={props.tasks}
                        removeTasks={props.removeTasks}
                        changeStatus={props.changeStatus}
                        tasksListID={props.tasksListID}
+                       updateTask={props.updateTask}
             />
             <div>
                 <Button btnClass={props.filter === 'All' ? 'btn-active' : ''}
