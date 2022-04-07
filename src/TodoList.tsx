@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FilterValuesType, TaskType} from "./App";
 import Button from "./Button";
 import TodoListHeader from "./TodoListHeader";
@@ -17,6 +17,7 @@ export type TodoListPropsType = {
     changeStatus:( tasksListID: string, id: string, isDone: boolean) => void
     removeTodoList: (tasksListID: string) => void
     updateTask: (tasksListID:string, taskId:string, newTitle:string) => void
+    updateTitle: (tasksListID:string, newTitle: string) => void
 
 }
 
@@ -42,6 +43,7 @@ export type TodoListPropsType = {
             <TodoListHeader title={props.title}
                             removeTodoList={props.removeTodoList}
                             tasksListID={props.tasksListID}
+                            updateTitle={props.updateTitle}
             />
 
             <AddItemForm callBack={addTaskHandler}/>
