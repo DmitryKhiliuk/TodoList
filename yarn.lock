@@ -11057,6 +11057,8 @@ workbox-build@^4.3.1:
   dependencies:
     "@babel/runtime" "^7.3.4"
     "@hapi/joi" "^15.0.0"
+     "babel-loader": "8.1.0"
+
     common-tags "^1.8.0"
     fs-extra "^4.0.2"
     glob "^7.1.3"
