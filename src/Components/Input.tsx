@@ -13,7 +13,11 @@ export const Input = (props:InputType) => {
     }
 
     const onClickHandler = () => {
-      props.inputCallBack(title)
+        if (title.trim() !== '') {
+            props.inputCallBack(title.trim())
+            setTitle('')
+        }
+
     }
     return (
         <div>

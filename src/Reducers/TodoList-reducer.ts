@@ -6,10 +6,11 @@ export const todoListReducer = (state: TodoListStateType[] = initialState, actio
     switch (action.type){
         case "ADD-TODOLIST": {
             let newTodoList = {
-                id: action.payload.idTDL,
-                title: action.payload.titleTDL,
+                idTDL: action.payload.idTDL,
+                titleTDL: action.payload.titleTDL,
                 filter: 'all'
             }
+
             return [...state, newTodoList]
         }
         default:
@@ -18,7 +19,7 @@ export const todoListReducer = (state: TodoListStateType[] = initialState, actio
 
 }
 
-export type ActionType = addTodoListACType
+type ActionType = addTodoListACType
 
 export type addTodoListACType = ReturnType<typeof addTodoListAC>
 export const addTodoListAC = (idTDL:string, titleTDL:string) => {

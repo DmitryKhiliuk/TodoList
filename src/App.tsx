@@ -6,6 +6,7 @@ import {AppRootStateType} from "./store";
 import {useDispatch, useSelector} from "react-redux";
 import {addTodoListAC} from "./Reducers/TodoList-reducer";
 import {v1} from "uuid";
+import {addTaskAC} from "./Reducers/Task-reducer";
 
 export type FilterType = 'all' | 'active' | 'complete'
 
@@ -37,6 +38,12 @@ function App() {
     }
 
 
+
+    const addTask = (idTDL: string, title: string) => {
+        dispatch(addTaskAC(idTDL, title))
+    }
+
+
     return (
         <div>
             <Input inputCallBack={addTodoList}/>
@@ -47,7 +54,11 @@ function App() {
                 if (el.filter === 'complete') {
                     tasks[el.idTDL].filter(t => t.isDone)
                 }
-                return <TodoList/>
+                return <TodoList key={el.idTDL}
+                                 idTDL={el.idTDL}
+                                 tasks={tasks[el.idTDL]}
+                                 titleTDL={el.titleTDL}
+                                 addTask={addTask}/>
 
             })}
         </div>
