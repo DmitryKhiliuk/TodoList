@@ -10,16 +10,22 @@ export const todoListReducer = (state: TodoListStateType[] = initialState, actio
                 titleTDL: action.payload.titleTDL,
                 filter: 'all'
             }
-
             return [...state, newTodoList]
         }
+        case "FILTERED-TASK": {
+            debugger
+            return state.map(el => el.idTDL === action.payload.idTDL ? {...el, filter: action.payload.filter}: el)
+        }
+        /*case "REMOVE-TODOLIST": {
+
+        }*/
         default:
             return state
     }
 
 }
 
-type ActionType = addTodoListACType
+type ActionType = addTodoListACType | filteredTaskACType |  removeTodoListACType
 
 export type addTodoListACType = ReturnType<typeof addTodoListAC>
 export const addTodoListAC = (idTDL:string, titleTDL:string) => {
@@ -28,6 +34,27 @@ export const addTodoListAC = (idTDL:string, titleTDL:string) => {
         payload: {
             idTDL,
             titleTDL,
+        }
+    }as const
+}
+
+export type filteredTaskACType = ReturnType<typeof filteredTaskAC>
+export const filteredTaskAC = (idTDL: string, filter: FilterType) => {
+    return {
+        type: 'FILTERED-TASK',
+        payload: {
+            idTDL,
+            filter
+        }
+    }as const
+}
+
+export type removeTodoListACType = ReturnType<typeof removeTodoListAC>
+export const removeTodoListAC = () => {
+    return {
+        type: 'REMOVE-TODOLIST',
+        payload: {
+
         }
     }as const
 }

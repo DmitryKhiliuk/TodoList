@@ -4,9 +4,9 @@ import {TodoList} from "./Components/TodoList";
 import {Input} from "./Components/Input";
 import {AppRootStateType} from "./store";
 import {useDispatch, useSelector} from "react-redux";
-import {addTodoListAC} from "./Reducers/TodoList-reducer";
+import {addTodoListAC, filteredTaskAC, removeTodoListAC} from "./Reducers/TodoList-reducer";
 import {v1} from "uuid";
-import {addTaskAC} from "./Reducers/Task-reducer";
+import {addTaskAC, checkedTaskAC, removeTaskAC} from "./Reducers/Task-reducer";
 
 export type FilterType = 'all' | 'active' | 'complete'
 
@@ -37,28 +37,52 @@ function App() {
         dispatch(addTodoListAC(idTDL, titleTDL))
     }
 
+    const removeTodoList = () => {
+        dispatch(removeTodoListAC())
+    }
+
+    const filteredTask = (idTDL: string, filter: FilterType) => {
+        dispatch(filteredTaskAC(idTDL, filter))
+    }
 
 
-    const addTask = (idTDL: string, title: string) => {
+
+    const addTask = (title: string, idTDL: string ) => {
         dispatch(addTaskAC(idTDL, title))
     }
+
+    const removeTask = (idTDL: string, idTask: string) => {
+      dispatch(removeTaskAC(idTDL, idTask))
+    }
+
+    const checkedTask = (idTDL: string, idTask: string, isDone: boolean) => {
+        dispatch(checkedTaskAC(idTDL, idTask, isDone))
+    }
+
+
 
 
     return (
         <div>
             <Input inputCallBack={addTodoList}/>
             {todolists.map(el => {
+                let allTodolistTasks = tasks[el.idTDL];
+
                 if (el.filter === 'active') {
-                    tasks[el.idTDL].filter(t => !t.isDone)
+                    allTodolistTasks = allTodolistTasks.filter(t => !t.isDone)
                 }
                 if (el.filter === 'complete') {
-                    tasks[el.idTDL].filter(t => t.isDone)
+                    allTodolistTasks = allTodolistTasks.filter(t => t.isDone)
                 }
                 return <TodoList key={el.idTDL}
                                  idTDL={el.idTDL}
-                                 tasks={tasks[el.idTDL]}
+                                 tasks={allTodolistTasks}
                                  titleTDL={el.titleTDL}
-                                 addTask={addTask}/>
+                                 filter={el.filter}
+                                 addTask={addTask}
+                                 removeTask={removeTask}
+                                 checkedTask={checkedTask}
+                                 filteredTask={filteredTask}/>
 
             })}
         </div>
