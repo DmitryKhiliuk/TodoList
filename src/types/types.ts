@@ -1,3 +1,8 @@
+import {addTodoListACType} from "../Reducers/todolists-reducer";
+
+export type FilterValuesType = 'all' | 'active' | 'completed';
+
+export type TodoListDomainType = TodoListType & { filter: FilterValuesType }
 
 export type TodoListType = {
     id: string
@@ -58,3 +63,4 @@ export type UpdateTaskModelType = {
     deadline: string
 }
 
+export type ActionType = addTodoListACType

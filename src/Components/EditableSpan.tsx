@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const AddItemForm = () => {
+export const EditableSpan = () => {
     return (
         <div>
 
