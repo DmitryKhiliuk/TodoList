@@ -1,4 +1,5 @@
-import {addTodoListACType} from "../Reducers/todolists-reducer";
+import {addTodoListACType, setTodoListACType} from "../Reducers/todolists-reducer";
+import {addTaskACType, setTaskType} from "../Reducers/tasks-reducer";
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
@@ -11,11 +12,11 @@ export type TodoListType = {
     title: string
 }
 
-export type ResponseType<T = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[]
     fieldsErrors: string[]
-    data: T
+    data: D
 }
 
 export enum TaskStatuses {
@@ -63,4 +64,4 @@ export type UpdateTaskModelType = {
     deadline: string
 }
 
-export type ActionType = addTodoListACType
+export type ActionType = addTodoListACType | setTodoListACType | addTaskACType | setTaskType
