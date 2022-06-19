@@ -28,7 +28,9 @@ export const TodoList = (props: TodoListType) => {
         <div>
             <SuperInput addItem={addItem}/>
 
-            {props.tasks.map((t) => <TaskList key={t.id}/>
+            {props.tasks.map((t) => <TaskList key={t.id}
+                                                        task={t}
+                                                        todolistId={props.TDLid}/>
             )}
 
         </div>

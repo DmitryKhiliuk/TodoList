@@ -29,7 +29,8 @@ function App() {
             {todolists.map((tl) => {
                 return <TodoList key={tl.id}
                                  TDLid={tl.id}
-                                 tasks={tasks[tl.id]}/>
+                                 tasks={tasks[tl.id]}
+                                    />
             })}
         </div>
     )
