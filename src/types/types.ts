@@ -2,7 +2,7 @@
 
 export type TodoListType = {
     id: string
-    addedDate: number
+    addedDate: string
     order: number
     title: string
 }
