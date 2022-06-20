@@ -1,7 +1,15 @@
-import {TaskResponseType, TasksStateType, TaskType, TodoListType} from "../types/types";
+import {
+    TaskRequestType,
+    TaskResponseType,
+    TasksStateType,
+    TaskType,
+    TodoListType,
+    UpdateDomainTaskModelType
+} from "../types/types";
 import {Dispatch} from "redux";
 import {todolistApi} from "../Api/todolist-api";
 import {addTodoListACType, deleteTodoListACType, setTodoListACType} from "./todolists-reducer";
+import {AppRootStateType} from "../App/store";
 
 
 export type TaskActionType = setTasksACType
@@ -9,7 +17,8 @@ export type TaskActionType = setTasksACType
     | addTodoListACType
     | addTaskACType
     | deleteTaskACType
-    |deleteTodoListACType
+    | deleteTodoListACType
+    | putTaskACType
 
 const initialState: TasksStateType = {}
 
@@ -45,6 +54,9 @@ export const tasksReducer = (state = initialState, action: TaskActionType): Task
         case "DELETE-TASK": {
             return {...state, [action.todolistId]: state[action.todolistId].filter((t) => t.id !== action.id)}
         }
+        case "PUT-TASK": {
+            return {...state, [action.todolistId]: state[action.todolistId].map((t) => t.id === action.id ? {...t, ...action.domainModel} : t)}
+        }
         default:
             return state
     }
@@ -54,7 +66,7 @@ export const setTasksAC = (todolistId:string, tasks: TaskType[]) => {
     return {
         type: 'SET-TASKS',
         todolistId,
-        tasks
+        tasks,
     } as const
 }
 
@@ -72,6 +84,16 @@ export const deleteTaskAC = (todolistId:string, id: string) => {
         type: 'DELETE-TASK',
         todolistId,
         id
+    } as const
+}
+
+export type putTaskACType = ReturnType<typeof putTaskAC>
+export const putTaskAC = (todolistId: string, id: string, domainModel: UpdateDomainTaskModelType) => {
+    return {
+        type: 'PUT-TASK',
+        todolistId,
+        id,
+        domainModel
     } as const
 }
 
@@ -99,6 +121,33 @@ export const deleteTaskTC = (todolistId:string, id: string) => {
         todolistApi.deleteTask(todolistId,id)
             .then((res) => {
                 dispatch(deleteTaskAC(todolistId,id))
+            })
+    }
+}
+
+export const putTaskTC = (todolistId: string, id: string, domainModel: UpdateDomainTaskModelType) => {
+    return (dispatch:Dispatch<TaskActionType>, getState: () => AppRootStateType) => {
+        const task = getState().tasks[todolistId].find(t => t.id === id)
+        if (!task) {
+            return
+        }
+
+        const apiModel: TaskRequestType = {
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            title: task.title,
+            status: task.status,
+            ...domainModel
+        }
+
+
+
+
+        todolistApi.putTask(todolistId,id,apiModel)
+            .then((res) => {
+                dispatch(putTaskAC(todolistId,id,domainModel))
             })
     }
 }

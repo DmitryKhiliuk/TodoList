@@ -6,6 +6,7 @@ import {Dispatch} from "redux";
 export type TodoListActionType = setTodoListACType
     | addTodoListACType
     | deleteTodoListACType
+    | putTodoListACType
 
 
 const initialState: TodoListDomainType[] = []
@@ -20,6 +21,9 @@ export const todolistReducer = (state = initialState, action: TodoListActionType
         }
         case "DELETE-TODOLIST": {
             return state.filter((tl) => tl.id !== action.todolistId)
+        }
+        case "PUT-TODOLIST": {
+            return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.title}: tl)
         }
         default:
             return state
@@ -49,6 +53,15 @@ export const deleteTodoListAC = (todolistId: string) => {
     } as const
 }
 
+export type putTodoListACType = ReturnType<typeof putTodoListAC>
+export const putTodoListAC = (title:string, todolistId:string) => {
+    return {
+        type: 'PUT-TODOLIST',
+        title,
+        todolistId
+    } as const
+}
+
 export const addTodoListTC = (title:string) => {
     return (dispatch:Dispatch<TodoListActionType>) => {
         todolistApi.postTodoList(title)
@@ -71,6 +84,15 @@ export const deleteTodoListTC = (todolistId:string) => {
         todolistApi.deleteTodoList(todolistId)
             .then((res) => {
                 dispatch(deleteTodoListAC(todolistId))
+            })
+    }
+}
+
+export const putTodoListTC = (title: string, todolistId:string) => {
+    return (dispatch:Dispatch<TodoListActionType>) => {
+        todolistApi.putTodoList(title,todolistId)
+            .then((res) => {
+                dispatch(putTodoListAC(title, todolistId))
             })
     }
 }

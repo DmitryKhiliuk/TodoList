@@ -9,7 +9,7 @@ import {TasksStateType, TaskType} from "../types/types";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
-import {deleteTodoListTC} from "../Reducers/todolists-reducer";
+import {deleteTodoListTC, putTodoListTC} from "../Reducers/todolists-reducer";
 
 export type TodoListType = {
     TDLid: string
@@ -33,8 +33,8 @@ export const TodoList = (props: TodoListType) => {
         dispatch(deleteTodoListTC(props.TDLid))
     }
     
-    const onChangeTodoListHandler = () => {
-
+    const onChangeTodoListHandler = (title:string) => {
+        dispatch(putTodoListTC(title, props.TDLid))
     }
 
     return (
